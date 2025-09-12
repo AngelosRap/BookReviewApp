@@ -10,5 +10,11 @@ public class BookMap : IEntityTypeConfiguration<Book>
     {
         builder.ToTable("Books");
         builder.HasKey(x => x.Id);
+
+        builder.HasMany(b => b.Reviews)
+            .WithOne(r => r.Book)
+            .HasForeignKey(r => r.BookId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
     }
 }

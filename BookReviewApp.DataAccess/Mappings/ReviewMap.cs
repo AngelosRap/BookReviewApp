@@ -11,11 +11,15 @@ public class ReviewMap : IEntityTypeConfiguration<Review>
         builder.ToTable("Reviews");
         builder.HasKey(r => r.Id);
 
-        builder.HasOne(b => b.Book)
-            .WithMany(b => b.Reviews)
-            .HasForeignKey(r => r.BookId)
-            .OnDelete(DeleteBehavior.Cascade)
+        builder.HasOne(r => r.User)
+            .WithMany(u => u.Reviews)
+            .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
+        builder.HasMany(r => r.Votes)
+            .WithOne(v => v.Review)
+            .HasForeignKey(v => v.ReviewId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
     }
 }

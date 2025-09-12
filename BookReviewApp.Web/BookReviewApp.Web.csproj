@@ -16,7 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BookReviewApp.Core\BookReviewApp.Core.csproj" />
     <ProjectReference Include="..\BookReviewApp.DataAccess\BookReviewApp.DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Reviews\" />
   </ItemGroup>
 
 </Project>

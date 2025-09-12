@@ -17,9 +17,10 @@ public static class ApplicationBuilderExtensions
         {
             var context = services.GetRequiredService<Context>();
             var userManager = services.GetRequiredService<UserManager<AppUser>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
             await context.Database.MigrateAsync();
-            await DbSeeder.SeedAsync(context, userManager);
+            await DbSeeder.SeedAsync(context, userManager, roleManager);
         }
         catch (Exception ex)
         {

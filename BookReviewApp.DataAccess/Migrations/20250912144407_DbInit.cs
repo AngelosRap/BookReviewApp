@@ -47,7 +47,7 @@ namespace BookReviewApp.Web.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reviews_Books_BookId",
                         column: x => x.BookId,
@@ -79,7 +79,8 @@ namespace BookReviewApp.Web.Data.Migrations
                         name: "FK_ReviewVotes_Reviews_ReviewId",
                         column: x => x.ReviewId,
                         principalTable: "Reviews",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -93,10 +94,9 @@ namespace BookReviewApp.Web.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReviewVotes_ReviewId_UserId",
+                name: "IX_ReviewVotes_ReviewId",
                 table: "ReviewVotes",
-                columns: new[] { "ReviewId", "UserId" },
-                unique: true);
+                column: "ReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReviewVotes_UserId",

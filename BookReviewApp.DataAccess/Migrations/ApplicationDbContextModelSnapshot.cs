@@ -169,12 +169,11 @@ namespace BookReviewApp.Web.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ReviewId");
+
                     b.HasIndex("UserId");
 
-                    b.HasIndex("ReviewId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("ReviewVotes");
+                    b.ToTable("ReviewVotes", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -325,7 +324,7 @@ namespace BookReviewApp.Web.Data.Migrations
                     b.HasOne("BookReviewApp.Domain.Models.AppUser", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -338,7 +337,7 @@ namespace BookReviewApp.Web.Data.Migrations
                     b.HasOne("BookReviewApp.Domain.Models.Review", "Review")
                         .WithMany("Votes")
                         .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookReviewApp.Domain.Models.AppUser", "User")
