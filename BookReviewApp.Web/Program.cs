@@ -1,53 +1,34 @@
-using BookReviewApp.Web.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using BookReviewApp.Web.Extensions;
 
-namespace BookReviewApp.Web
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+// Services
+builder.Services.AddApplicationDbContext(builder.Configuration);
+builder.Services.AddAuthenticationServices();
+builder.Services.AddApplicationServices();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews();
+var app = builder.Build();
 
-            var app = builder.Build();
+// Apply migrations + seed
+await app.ApplyMigrationsAndSeedAsync();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+// HTTP pipeline
+if (app.Environment.IsDevelopment())
+    app.UseMigrationsEndPoint();
+else
+    app.UseExceptionHandler("/Home/Error");
 
-            app.UseHttpsRedirection();
-            app.UseRouting();
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
 
-            app.UseAuthorization();
+app.MapStaticAssets();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
-            app.MapStaticAssets();
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
-            app.MapRazorPages()
-               .WithStaticAssets();
+app.MapRazorPages()
+   .WithStaticAssets();
 
-            app.Run();
-        }
-    }
-}
+app.Run();

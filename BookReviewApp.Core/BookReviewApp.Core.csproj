@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BookReviewApp.DataAccess\BookReviewApp.DataAccess.csproj" />
+    <ProjectReference Include="..\BookReviewApp.Domain\BookReviewApp.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
