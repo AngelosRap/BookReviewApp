@@ -1,5 +1,67 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model BookDisplayViewModel
+
+@using BookReviewApp.Domain.Models
+@using BookReviewApp.Web.Models.Book
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<AppUser> UserManager
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@Model.Title</h2>
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <a asp-controller="Reviews" asp-action="Create" asp-route-bookId="@Model.Id" class="btn btn-primary">
+            Add Review
+        </a>
+    }
+</div>
+
+<p><strong>Author:</strong> @Model.Author</p>
+<p><strong>Published:</strong> @Model.PublishedYear</p>
+<p><strong>Genre:</strong> @Model.Genre</p>
+<p><strong>Average Rating:</strong> @Model.AverageRating (@Model.ReviewsCount reviews)</p>
+
+<hr />
+
+<h3>Reviews</h3>
+@if (!Model.Reviews.Any())
+{
+    <p>No reviews yet.</p>
+}
+else
+{
+    foreach (var review in Model.Reviews)
+    {
+        var currentUserId = UserManager.GetUserId(User);
+        var userVote = review.Votes.FirstOrDefault(v => v.UserId == currentUserId);
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5>@review.UserName</h5>
+                <p>@review.Content</p>
+                <p>⭐ @review.Rating | 👍 @review.Votes.Count(v => v.IsUpvote) | 👎 @review.Votes.Count(v => !v.IsUpvote)</p>
+
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <form asp-controller="ReviewVotes" asp-action="Vote" method="post" class="d-inline">
+                        <input type="hidden" name="reviewId" value="@review.Id" />
+                        <input type="hidden" name="bookId" value="@Model.Id" />
+
+                        <button type="submit" name="isUpvote" value="true"
+                                class="btn btn-sm btn-primary"
+                                @(userVote != null && userVote.IsUpvote ? "disabled" : "")>
+                            Like
+                        </button>
+
+                        <button type="submit" name="isUpvote" value="false"
+                                class="btn btn-sm btn-danger"
+                                @(userVote != null && !userVote.IsUpvote ? "disabled" : "")>
+                            Dislike
+                        </button>
+                    </form>
+                }
+
+            </div>
+        </div>
+    }
 }

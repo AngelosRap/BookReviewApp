@@ -1,6 +1,11 @@
-﻿@model IEnumerable<BookViewModel>
+﻿@using BookReviewApp.Web.Models.Book
+@model IEnumerable<BookDisplayViewModel>
 
 <h2>Books</h2>
+
+<div class="mb-3 text-end">
+    <a asp-action="Create" class="btn btn-primary">Add Book</a>
+</div>
 
 <table class="table">
     <thead>
@@ -11,7 +16,7 @@
             <th>Genre</th>
             <th>Rating</th>
             <th>Reviews</th>
-            <th></th> <!-- Actions column -->
+            <th></th> 
         </tr>
     </thead>
     <tbody>
@@ -26,11 +31,6 @@
                 <td>@book.ReviewsCount</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-info">Details</a>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@book.Id">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
-                    }
                 </td>
             </tr>
         }

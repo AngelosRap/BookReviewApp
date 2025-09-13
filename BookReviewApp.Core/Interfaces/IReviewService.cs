@@ -9,4 +9,5 @@ public interface IReviewService
     public Task<List<Review>> GetAll();
     public Task<Review> Update(Review review);
     public Task Delete(int id);
+    public Task<bool> Vote(string userId, int reviewId, bool isUpvote);
 }

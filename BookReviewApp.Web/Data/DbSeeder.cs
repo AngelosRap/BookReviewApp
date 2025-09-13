@@ -8,38 +8,29 @@ public static class DbSeeder
 {
     public static async Task SeedAsync(
         Context context,
-        UserManager<AppUser> userManager,
-        RoleManager<IdentityRole> roleManager) // add RoleManager
+        UserManager<AppUser> userManager)
     {
-        // 1. Seed roles
-        var roles = new[] { "Admin", "User" };
-        foreach (var role in roles)
+        var users = new[]
         {
-            if (!await roleManager.RoleExistsAsync(role))
+            new { UserName = "alice", Email = "alice@test.com", Password = "Password123!"},
+            new { UserName = "bob", Email = "bob@test.com", Password = "Password123!" },
+        };
+
+        foreach (var u in users)
+        {
+            var user = await userManager.FindByEmailAsync(u.Email);
+            if (user == null)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                user = new AppUser { UserName = u.UserName, Email = u.Email, EmailConfirmed = true };
+                var result = await userManager.CreateAsync(user, u.Password);
+                if (!result.Succeeded)
+                {
+                    throw new Exception($"Failed to create user {u.Email}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
             }
         }
 
-        // 2. Seed users
-        if (!userManager.Users.Any())
-        {
-            var alice = new AppUser { UserName = "alice", Email = "alice@test.com", EmailConfirmed = true };
-            var bob = new AppUser { UserName = "bob", Email = "bob@test.com", EmailConfirmed = true };
-            var admin = new AppUser { UserName = "admin", Email = "admin@admin.com", EmailConfirmed = true };
 
-            await userManager.CreateAsync(alice, "Password123!");
-            await userManager.CreateAsync(bob, "Password123!");
-            await userManager.CreateAsync(admin, "Password123!");
-
-            // Assign Admin role to Alice
-            await userManager.AddToRoleAsync(admin, "Admin");
-            // Bob is just a regular user
-            await userManager.AddToRoleAsync(bob, "User");
-            await userManager.AddToRoleAsync(alice, "User");
-        }
-
-        // 3. Seed books
         if (!context.Books.Any())
         {
             context.Books.AddRange(
@@ -49,7 +40,6 @@ public static class DbSeeder
             await context.SaveChangesAsync();
         }
 
-        // 4. Seed reviews
         if (!context.Reviews.Any())
         {
             var alice = await userManager.FindByNameAsync("alice");
@@ -77,7 +67,6 @@ public static class DbSeeder
             await context.Reviews.AddRangeAsync(review1, review2);
             await context.SaveChangesAsync();
 
-            // 5. Seed review votes
             await context.ReviewVotes.AddRangeAsync(
                 new ReviewVote
                 {

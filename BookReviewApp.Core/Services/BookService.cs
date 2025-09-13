@@ -20,11 +20,15 @@ public class BookService(Context context) : IBookService
     public async Task<Book> Get(int id)
     {
         var book = await _context.Books
-            .Include(b => b.Reviews)
-            .FirstOrDefaultAsync(b => b.Id == id);
+        .Include(b => b.Reviews)
+            .ThenInclude(r => r.User)
+        .Include(b => b.Reviews)
+            .ThenInclude(r => r.Votes)
+        .FirstOrDefaultAsync(b => b.Id == id);
 
         return book ?? throw new KeyNotFoundException($"Book with Id {id} not found.");
     }
+
     public async Task<List<Book>> GetAll()
     {
         return await _context.Books
@@ -48,9 +52,7 @@ public class BookService(Context context) : IBookService
 
     public async Task Delete(int id)
     {
-        var existing = await _context.Books.FindAsync(id);
-        if (existing == null)
-            throw new KeyNotFoundException($"Book with Id {id} not found.");
+        var existing = await _context.Books.FindAsync(id) ?? throw new KeyNotFoundException($"Book with Id {id} not found.");
 
         _context.Books.Remove(existing);
         await _context.SaveChangesAsync();

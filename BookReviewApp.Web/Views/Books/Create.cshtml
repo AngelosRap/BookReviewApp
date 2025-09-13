@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model BookReviewApp.Web.Models.Book.BookCreateViewModel
 @{
+    ViewData["Title"] = "Create Book";
+}
+
+<h2>Create Book</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-floating mb-3">
+        <input asp-for="Title" class="form-control" placeholder="Title" />
+        <label asp-for="Title">Title</label>
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Author" class="form-control" placeholder="Author" />
+        <label asp-for="Author">Author</label>
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="PublishedYear" type="number" class="form-control" placeholder="Published Year" />
+        <label asp-for="PublishedYear">Published Year</label>
+        <span asp-validation-for="PublishedYear" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Genre" class="form-control" placeholder="Genre" />
+        <label asp-for="Genre">Genre</label>
+        <span asp-validation-for="Genre" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

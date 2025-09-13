@@ -62,4 +62,32 @@ public class ReviewService(Context context) : IReviewService
         _context.Reviews.Remove(existing);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> Vote(string userId, int reviewId, bool isUpvote)
+    {
+        var review = await _context.Reviews
+            .Include(r => r.Votes)
+            .FirstOrDefaultAsync(r => r.Id == reviewId) ?? throw new KeyNotFoundException($"Review with Id {reviewId} not found.");
+
+        var existingVote = review.Votes.FirstOrDefault(v => v.UserId == userId);
+
+        if (existingVote != null)
+        {
+            // Update the vote if it already exists
+            existingVote.IsUpvote = isUpvote;
+        }
+        else
+        {
+            // Create a new vote
+            review.Votes.Add(new ReviewVote
+            {
+                ReviewId = reviewId,
+                UserId = userId,
+                IsUpvote = isUpvote
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }
