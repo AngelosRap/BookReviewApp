@@ -1,4 +1,4 @@
-amespace BookReviewApp.Api;
+namespace BookReviewApp.Api;
 
 public class WeatherForecast
 {

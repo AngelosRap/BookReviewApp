@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="FluentAssertions" Version="8.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
@@ -25,12 +26,12 @@
     <Folder Include="Api\" />
     <Folder Include="DataAccess\" />
     <Folder Include="Domain\" />
-    <Folder Include="Web\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BookReviewApp.Core\BookReviewApp.Core.csproj" />
     <ProjectReference Include="..\BookReviewApp.DataAccess\BookReviewApp.DataAccess.csproj" />
+    <ProjectReference Include="..\BookReviewApp.Web\BookReviewApp.Web.csproj" />
   </ItemGroup>
 
 </Project>

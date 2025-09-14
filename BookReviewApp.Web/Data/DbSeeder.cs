@@ -30,7 +30,6 @@ public static class DbSeeder
             }
         }
 
-
         if (!context.Books.Any())
         {
             context.Books.AddRange(
