@@ -63,7 +63,7 @@ namespace BookReviewApp.Web.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReviewId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsUpvote = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -73,8 +73,7 @@ namespace BookReviewApp.Web.Data.Migrations
                         name: "FK_ReviewVotes_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ReviewVotes_Reviews_ReviewId",
                         column: x => x.ReviewId,

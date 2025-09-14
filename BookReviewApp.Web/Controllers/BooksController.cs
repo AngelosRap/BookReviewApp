@@ -11,9 +11,16 @@ public class BooksController(IBookService bookService) : Controller
 {
     private readonly IBookService _bookService = bookService;
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? genre, int? year, double? minRating)
     {
-        var books = await _bookService.GetAll();
+        var books = await _bookService.GetAll(author: null, genre: genre, year: year, withDetails: true);
+
+        if (minRating.HasValue)
+        {
+            books = books
+                .Where(b => b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) >= minRating.Value : false)
+                .ToList();
+        }
 
         var viewModels = books.Select(b => b.ToViewModel()).ToList();
         return View(viewModels);
@@ -44,14 +51,15 @@ public class BooksController(IBookService bookService) : Controller
     // GET: Books/Edit/5
     public async Task<IActionResult> Edit(int id)
     {
-        var book = await _bookService.Get(id);
+        var res = await _bookService.Get(id);
 
-        if (book is null)
+        if (res.Failed)
         {
-            return NotFound();
+            return NotFound(res.Message);
         }
 
-        var bookEditViewModel = book.ToEditViewModel();
+        var bookEditViewModel = res.Data!.ToEditViewModel();
+
         return View(bookEditViewModel);
     }
 
@@ -60,11 +68,11 @@ public class BooksController(IBookService bookService) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, BookEditViewModel bookEditViewModel)
     {
-        var existingBookToUpdate = await _bookService.Get(id);
+        var res = await _bookService.Get(id);
 
-        if (existingBookToUpdate is null)
+        if (res.Failed)
         {
-            return NotFound();
+            return NotFound(res.Message);
         }
 
         if (!ModelState.IsValid)
@@ -72,23 +80,24 @@ public class BooksController(IBookService bookService) : Controller
             return View(bookEditViewModel);
         }
 
-        existingBookToUpdate.UpdateWithEditViewModel(bookEditViewModel);
+        res.Data!.UpdateWithEditViewModel(bookEditViewModel);
 
-        await _bookService.Update(existingBookToUpdate);
-        return RedirectToAction(nameof(Index));
+        var updateRes = await _bookService.Update(res.Data!);
+
+        return updateRes.Failed ? BadRequest(updateRes.Message) : RedirectToAction(nameof(Index));
     }
 
     // GET: Books/Details/5
     public async Task<IActionResult> Details(int id)
     {
-        var book = await _bookService.Get(id);
+        var res = await _bookService.Get(id);
 
-        if (book == null)
+        if (res.Failed)
         {
-            return NotFound();
+            return NotFound(res.Message);
         }
 
-        var viewModel = book.ToViewModel();
+        var viewModel = res.Data!.ToViewModel();
 
         return View(viewModel);
     }

@@ -3,11 +3,18 @@
 
 <h2>Books</h2>
 
-<div class="mb-3 text-end">
-    <a asp-action="Create" class="btn btn-primary">Add Book</a>
+<div class="mb-3 d-flex justify-content-between">
+    <form method="get" class="d-flex gap-2">
+        <input type="text" name="genre" placeholder="Genre" class="form-control" value="@Context.Request.Query["genre"]" />
+        <input type="number" name="year" placeholder="Year" class="form-control" value="@Context.Request.Query["year"]" />
+        <input type="number" name="minRating" placeholder="Min Rating" step="0.1" min="1" max="5" class="form-control" value="@Context.Request.Query["minRating"]" />
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    <a asp-action="Create" class="btn btn-success">Add Book</a>
 </div>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Title</th>
@@ -16,7 +23,7 @@
             <th>Genre</th>
             <th>Rating</th>
             <th>Reviews</th>
-            <th></th> 
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +34,7 @@
                 <td>@book.Author</td>
                 <td>@book.PublishedYear</td>
                 <td>@book.Genre</td>
-                <td>@book.AverageRating</td>
+                <td>@(book.AverageRating.ToString("0.0"))</td>
                 <td>@book.ReviewsCount</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-info">Details</a>

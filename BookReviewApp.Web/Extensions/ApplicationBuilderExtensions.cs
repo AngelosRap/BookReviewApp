@@ -18,7 +18,13 @@ public static class ApplicationBuilderExtensions
             var context = services.GetRequiredService<Context>();
             var userManager = services.GetRequiredService<UserManager<AppUser>>();
 
-            await context.Database.MigrateAsync();
+            // Check for pending migrations
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+            if (pendingMigrations.Any())
+            {
+                await context.Database.MigrateAsync();
+            }
+
             await DbSeeder.SeedAsync(context, userManager);
         }
         catch (Exception ex)

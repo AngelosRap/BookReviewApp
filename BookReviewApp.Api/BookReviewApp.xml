@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BookReviewApp.Api</name>
+    </assembly>
+    <members>
+        <member name="M:BookReviewApp.Api.Controllers.BooksController.Get(System.Int32)">
+            <summary>
+            Gets a book by Id
+            </summary>
+            <param name="id">The book Id</param>
+            <returns>Book details</returns>
+        </member>
+    </members>
+</doc>

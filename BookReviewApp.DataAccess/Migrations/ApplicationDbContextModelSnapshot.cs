@@ -164,7 +164,6 @@ namespace BookReviewApp.Web.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -342,9 +341,7 @@ namespace BookReviewApp.Web.Data.Migrations
 
                     b.HasOne("BookReviewApp.Domain.Models.AppUser", "User")
                         .WithMany("Votes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Review");
 
