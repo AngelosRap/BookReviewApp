@@ -3,7 +3,7 @@ using BookReviewApp.Domain.Models;
 
 namespace BookReviewApp.Core.Validators;
 
-internal static class BookValidator
+public static class BookValidator
 {
     public static Result<Book> Validate(Book book)
     {

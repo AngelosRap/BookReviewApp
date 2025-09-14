@@ -66,14 +66,11 @@ public class BookService(Context context) : IBookService
             query = query.Where(b => b.PublishedYear == year.Value);
         }
 
-        if (withDetails.HasValue && withDetails.Value)
-        {
-            return await query
+        return withDetails.HasValue && withDetails.Value
+            ? await query
                 .Include(b => b.Reviews)
-                .ToListAsync();
-        }
-
-        return await query.ToListAsync();
+                .ToListAsync()
+            : await query.ToListAsync();
     }
 
     public async Task<Result<Book>> Update(Book book)
