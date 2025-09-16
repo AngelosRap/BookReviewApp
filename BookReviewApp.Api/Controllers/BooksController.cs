@@ -28,6 +28,7 @@ public class BooksController(IBookService bookService, IReviewService reviewServ
     {
         var books = await _bookService.GetAll(author, genre, year);
         var bookListResponse = books.Select(x => x.ToListResponse()).ToList();
+
         return Ok(bookListResponse);
     }
 
@@ -37,12 +38,15 @@ public class BooksController(IBookService bookService, IReviewService reviewServ
     [SwaggerResponse(StatusCodes.Status404NotFound, "Book not found")]
     public async Task<IActionResult> Get(int id)
     {
-        var res = await _bookService.Get(id);
-        if (res.Failed)
+        var bookRes = await _bookService.Get(id);
+
+        if (bookRes.Failed)
         {
-            return NotFound(res.Message);
+            return NotFound(bookRes.Message);
         }
-        var bookDetailResponse = res.Data!.ToDetailResponse();
+
+        var bookDetailResponse = bookRes.Data!.ToDetailResponse();
+
         return Ok(bookDetailResponse);
     }
 
@@ -52,13 +56,15 @@ public class BooksController(IBookService bookService, IReviewService reviewServ
     [SwaggerResponse(StatusCodes.Status404NotFound, "Book not found")]
     public async Task<IActionResult> GetReviews(int bookId)
     {
-        var bookExists = await _bookService.Get(bookId);
-        if (bookExists.Data is null)
+        var bookRes = await _bookService.Get(bookId);
+
+        if (bookRes.Data is null)
         {
-            return NotFound(bookExists.Message);
+            return NotFound(bookRes.Message);
         }
 
         var reviews = await _reviewService.GetByBookId(bookId);
+
         return Ok(reviews.Select(x => x.ToResponse()));
     }
 
@@ -74,14 +80,16 @@ public class BooksController(IBookService bookService, IReviewService reviewServ
         }
 
         var book = bookCreateRequest.ToBookEntity();
-        var res = await _bookService.Create(book);
 
-        if (res.Failed)
+        var bookRes = await _bookService.Create(book);
+
+        if (bookRes.Failed)
         {
-            return BadRequest(res.Message);
+            return BadRequest(bookRes.Message);
         }
 
-        var response = res.Data!.ToDetailResponse();
+        var response = bookRes.Data!.ToDetailResponse();
+
         return CreatedAtAction(
             nameof(Get),
             new { id = book.Id },

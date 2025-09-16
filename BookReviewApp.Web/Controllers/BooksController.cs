@@ -26,13 +26,11 @@ public class BooksController(IBookService bookService) : Controller
         return View(viewModels);
     }
 
-    // GET: Books/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: Books/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(BookCreateViewModel bookCreateViewModel)
@@ -48,7 +46,6 @@ public class BooksController(IBookService bookService) : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // GET: Books/Edit/5
     public async Task<IActionResult> Edit(int id)
     {
         var res = await _bookService.Get(id);
@@ -63,7 +60,6 @@ public class BooksController(IBookService bookService) : Controller
         return View(bookEditViewModel);
     }
 
-    // POST: Books/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, BookEditViewModel bookEditViewModel)
@@ -87,7 +83,6 @@ public class BooksController(IBookService bookService) : Controller
         return updateRes.Failed ? BadRequest(updateRes.Message) : RedirectToAction(nameof(Index));
     }
 
-    // GET: Books/Details/5
     public async Task<IActionResult> Details(int id)
     {
         var res = await _bookService.Get(id);

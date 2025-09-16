@@ -21,5 +21,16 @@ public class ReviewMap : IEntityTypeConfiguration<Review>
             .HasForeignKey(v => v.ReviewId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
+
+        builder.Property(r => r.Content)
+           .IsRequired()
+           .HasMaxLength(1000);
+
+        builder.Property(r => r.Rating)
+               .IsRequired();
+
+        builder.Property(r => r.BookId)
+               .IsRequired();
+
     }
 }

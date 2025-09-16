@@ -22,8 +22,8 @@ public class AuthController(JwtProvider jwtProvider) : ControllerBase
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Invalid email or password")]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
     {
-        var res = await _jwtProvider.Authenticate(model);
+        var loginResponseRes = await _jwtProvider.Authenticate(model);
 
-        return res.Failed ? Unauthorized(res.Message) : Ok(res.Data);
+        return loginResponseRes.Failed ? Unauthorized(loginResponseRes.Message) : Ok(loginResponseRes.Data);
     }
 }

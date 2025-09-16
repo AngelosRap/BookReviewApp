@@ -15,7 +15,6 @@ public class ReviewsController(IReviewService reviewService, IBookService bookSe
     private readonly IBookService _bookService = bookService;
     private readonly UserManager<AppUser> _userManager = userManager;
 
-    // GET: Reviews/Create?bookId=5
     [HttpGet]
     public async Task<IActionResult> Create(int bookId)
     {
@@ -30,7 +29,6 @@ public class ReviewsController(IReviewService reviewService, IBookService bookSe
         return View();
     }
 
-    // POST: Reviews/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(ReviewCreateViewModel vm, int bookId)
