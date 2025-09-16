@@ -168,9 +168,11 @@ namespace BookReviewApp.Web.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReviewId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("ReviewId", "UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("ReviewVotes", (string)null);
                 });

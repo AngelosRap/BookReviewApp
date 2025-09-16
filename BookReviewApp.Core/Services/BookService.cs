@@ -69,6 +69,9 @@ public class BookService(Context context) : IBookService
         return withDetails.HasValue && withDetails.Value
             ? await query
                 .Include(b => b.Reviews)
+                    .ThenInclude(r => r.User)
+                .Include(b => b.Reviews)
+                    .ThenInclude(r => r.Votes)
                 .ToListAsync()
             : await query.ToListAsync();
     }

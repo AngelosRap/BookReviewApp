@@ -29,7 +29,7 @@ public static class BookValidator
 
         if (book.PublishedYear <= 0 || book.PublishedYear > DateTime.UtcNow.Year)
         {
-            return Result<Book>.CreateFailed("Published year must be a positive number and between 0 and 2025");
+            return Result<Book>.CreateFailed($"Published year must be a positive number and between 0 and {DateTime.UtcNow.Year}");
         }
 
         return Result<Book>.CreateSuccessful(book, "Book is validated.");

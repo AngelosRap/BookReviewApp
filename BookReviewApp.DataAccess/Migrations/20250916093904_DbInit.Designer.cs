@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookReviewApp.Web.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250914140830_DbInit")]
+    [Migration("20250916093904_DbInit")]
     partial class DbInit
     {
         /// <inheritdoc />
@@ -171,9 +171,11 @@ namespace BookReviewApp.Web.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReviewId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("ReviewId", "UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("ReviewVotes", (string)null);
                 });

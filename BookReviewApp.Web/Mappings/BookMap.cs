@@ -3,7 +3,7 @@ using BookReviewApp.Web.Models.Book;
 
 namespace BookReviewApp.Web.Mappings;
 
-public static class BookMapper
+public static class BookMap
 {
     public static BookDisplayViewModel ToViewModel(this Book book)
     {

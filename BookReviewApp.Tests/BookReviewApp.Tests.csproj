@@ -23,12 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Api\" />
-    <Folder Include="DataAccess\" />
-    <Folder Include="Domain\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\BookReviewApp.Api\BookReviewApp.Api.csproj" />
     <ProjectReference Include="..\BookReviewApp.Core\BookReviewApp.Core.csproj" />
     <ProjectReference Include="..\BookReviewApp.DataAccess\BookReviewApp.DataAccess.csproj" />
     <ProjectReference Include="..\BookReviewApp.Web\BookReviewApp.Web.csproj" />

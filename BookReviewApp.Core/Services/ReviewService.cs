@@ -21,11 +21,11 @@ public class ReviewService(Context context) : IReviewService
             return Result<Review>.CreateFailed(res.Message);
         }
 
-        var checkBookAndReviewExistance = await CheckBookAndUserExistence(review.BookId, review.UserId!);
+        var checkBookAndReviewExistence = await CheckBookAndUserExistence(review.BookId, review.UserId!);
 
-        if (checkBookAndReviewExistance.Failed)
+        if (checkBookAndReviewExistence.Failed)
         {
-            return Result<Review>.CreateFailed(checkBookAndReviewExistance.Message);
+            return Result<Review>.CreateFailed(checkBookAndReviewExistence.Message);
         }
 
         _context.Reviews.Add(review);
@@ -77,11 +77,11 @@ public class ReviewService(Context context) : IReviewService
             return Result<Review>.CreateFailed(res.Message);
         }
 
-        var checkBookAndReviewExistance = await CheckBookAndUserExistence(review.BookId, review.UserId!);
+        var checkBookAndReviewExistence = await CheckBookAndUserExistence(review.BookId, review.UserId!);
 
-        if (checkBookAndReviewExistance.Failed)
+        if (checkBookAndReviewExistence.Failed)
         {
-            return Result<Review>.CreateFailed(checkBookAndReviewExistance.Message);
+            return Result<Review>.CreateFailed(checkBookAndReviewExistence.Message);
         }
 
         _context.UpdateEntity(reviewToUpdate, review);

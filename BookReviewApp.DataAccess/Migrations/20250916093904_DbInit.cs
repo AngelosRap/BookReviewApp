@@ -93,9 +93,11 @@ namespace BookReviewApp.Web.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReviewVotes_ReviewId",
+                name: "IX_ReviewVotes_ReviewId_UserId",
                 table: "ReviewVotes",
-                column: "ReviewId");
+                columns: new[] { "ReviewId", "UserId" },
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReviewVotes_UserId",

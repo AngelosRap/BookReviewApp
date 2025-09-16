@@ -23,9 +23,9 @@ public class ReviewVotesController(IReviewService reviewService, UserManager<App
             return Unauthorized();
         }
 
-        var review = await _reviewService.Get(reviewId);
+        var reviewRes = await _reviewService.Get(reviewId);
 
-        if (review == null)
+        if (reviewRes.Failed)
         {
             return NotFound($"Review {reviewId} not found.");
         }

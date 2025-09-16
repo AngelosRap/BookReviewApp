@@ -6,11 +6,11 @@ namespace BookReviewApp.DataAccess.Mappings;
 
 public class ReviewVoteMap : IEntityTypeConfiguration<ReviewVote>
 {
-    public void Configure(EntityTypeBuilder<ReviewVote> builder)
-    {
-        builder.ToTable("ReviewVotes");
-        builder.HasKey(v => v.Id);
+	public void Configure(EntityTypeBuilder<ReviewVote> builder)
+	{
+		builder.ToTable("ReviewVotes");
+		builder.HasKey(v => v.Id);
 
-
-    }
+		builder.HasIndex(v => new { v.ReviewId, v.UserId }).IsUnique();
+	}
 }

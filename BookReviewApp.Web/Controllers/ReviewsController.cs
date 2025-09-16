@@ -9,19 +9,23 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookReviewApp.Web.Controllers;
 
 [Authorize]
-public class ReviewsController(IReviewService reviewService, UserManager<AppUser> userManager) : Controller
+public class ReviewsController(IReviewService reviewService, IBookService bookService, UserManager<AppUser> userManager) : Controller
 {
     private readonly IReviewService _reviewService = reviewService;
+    private readonly IBookService _bookService = bookService;
     private readonly UserManager<AppUser> _userManager = userManager;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
     // GET: Reviews/Create?bookId=5
-    public IActionResult Create(int bookId)
+    [HttpGet]
+    public async Task<IActionResult> Create(int bookId)
     {
+        var bookResult = await _bookService.Get(bookId);
+
+        if (bookResult.Failed)
+        {
+            return NotFound($"Book with ID {bookId} not found.");
+        }
+
         ViewBag.BookId = bookId;
         return View();
     }
@@ -35,6 +39,14 @@ public class ReviewsController(IReviewService reviewService, UserManager<AppUser
         {
             return View(vm);
         }
+
+        var bookRes = await _bookService.Get(bookId);
+
+        if (bookRes.Failed)
+        {
+            return NotFound(bookRes.Message);
+        }
+
 
         var userId = _userManager.GetUserId(User);
 

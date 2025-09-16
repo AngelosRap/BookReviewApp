@@ -8,7 +8,7 @@ namespace BookReviewApp.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(JwtProvider jwtProvider) : Controller
+public class AuthController(JwtProvider jwtProvider) : ControllerBase
 {
     private readonly JwtProvider _jwtProvider = jwtProvider;
 

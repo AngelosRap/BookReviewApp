@@ -3,14 +3,17 @@ using BookReviewApp.Api.Models.Request;
 using BookReviewApp.Api.Models.Response.Book;
 using BookReviewApp.Api.Models.Response.Review;
 using BookReviewApp.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace BookReviewApp.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class BooksController(IBookService bookService, IReviewService reviewService) : Controller
+[SwaggerResponse(StatusCodes.Status401Unauthorized, "Unauthorized")]
+public class BooksController(IBookService bookService, IReviewService reviewService) : ControllerBase
 {
     private readonly IBookService _bookService = bookService;
     private readonly IReviewService _reviewService = reviewService;
@@ -21,12 +24,11 @@ public class BooksController(IBookService bookService, IReviewService reviewServ
         Description = "Retrieve a list of books, optionally filtered by author, genre, or year."
     )]
     [SwaggerResponse(StatusCodes.Status200OK, "List of books", typeof(IEnumerable<BookListResponse>))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, "No books found")]
     public async Task<IActionResult> GetAll([FromQuery] string? author = null, string? genre = null, int? year = null)
     {
         var books = await _bookService.GetAll(author, genre, year);
         var bookListResponse = books.Select(x => x.ToListResponse()).ToList();
-        return bookListResponse.Count == 0 ? NotFound() : Ok(bookListResponse);
+        return Ok(bookListResponse);
     }
 
     [HttpGet("{id}")]
@@ -53,7 +55,7 @@ public class BooksController(IBookService bookService, IReviewService reviewServ
         var bookExists = await _bookService.Get(bookId);
         if (bookExists.Data is null)
         {
-            return NotFound();
+            return NotFound(bookExists.Message);
         }
 
         var reviews = await _reviewService.GetByBookId(bookId);
