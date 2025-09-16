@@ -2,22 +2,21 @@ using BookReviewApp.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace BookReviewApp.Web.Controllers
+namespace BookReviewApp.Web.Controllers;
+
+public class HomeController(ILogger<HomeController> logger) : Controller
 {
-    public class HomeController(ILogger<HomeController> logger) : Controller
+    private readonly ILogger<HomeController> _logger = logger;
+
+    public IActionResult Index()
     {
-        private readonly ILogger<HomeController> _logger = logger;
 
-        public IActionResult Index()
-        {
+        return View();
+    }
 
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

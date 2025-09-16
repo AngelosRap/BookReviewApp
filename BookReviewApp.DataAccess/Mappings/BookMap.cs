@@ -16,5 +16,20 @@ public class BookMap : IEntityTypeConfiguration<Book>
             .HasForeignKey(r => r.BookId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
+
+        builder.Property(b => b.Title)
+           .IsRequired()
+           .HasMaxLength(100);
+
+        builder.Property(b => b.Author)
+               .IsRequired()
+               .HasMaxLength(100);
+
+        builder.Property(b => b.PublishedYear)
+               .IsRequired();
+
+        builder.Property(b => b.Genre)
+               .IsRequired()
+               .HasMaxLength(50);
     }
 }
