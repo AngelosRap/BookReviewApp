@@ -15,4 +15,8 @@
     <ProjectReference Include="..\BookReviewApp.Domain\BookReviewApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
