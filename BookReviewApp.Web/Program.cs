@@ -33,7 +33,7 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 // Apply migrations + seed
-await app.InitializeRolesAsync();
 await app.ApplyMigrationsAndSeedAsync();
+await app.InitializeRolesAsync();
 
 app.Run();
